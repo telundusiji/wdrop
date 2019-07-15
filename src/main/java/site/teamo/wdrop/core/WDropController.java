@@ -19,7 +19,7 @@ public class WDropController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WDropController.class);
 
-    @RequestMapping(value = "/**",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/WDrop/**",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
     public JSONObject wDrop(HttpServletRequest request, HttpServletResponse response){
         JSONObject para = resolveRequest(request);
         LOGGER.info("\n--REQUEST:{}\n--QUERY:{}\n--PARAMETER:{}",request.getRequestURL().toString(),request.getQueryString(),para.toJSONString());
