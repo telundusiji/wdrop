@@ -9,6 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 import site.teamo.wdrop.bean.Plugin;
 import site.teamo.wdrop.tool.FileUtil;
 import site.teamo.wdrop.tool.IDFactory;
+import site.teamo.wdrop.tool.PropertiesReader;
+import site.teamo.wdrop.util.WDropConstant;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -49,8 +51,8 @@ public class PluginUploadRequest {
         libDir.mkdirs();
         if (pluginJars != null) {
             for (MultipartFile multipartFile : pluginJars) {
-                if(!multipartFile.getOriginalFilename().endsWith(".jar")){
-                    throw new RuntimeException("this file "+multipartFile.getOriginalFilename()+" is not a jar");
+                if (!multipartFile.getOriginalFilename().endsWith(".jar")) {
+                    throw new RuntimeException("this file " + multipartFile.getOriginalFilename() + " is not a jar");
                 }
                 File jarFile = new File(pluginLibPath + File.separatorChar + multipartFile.getOriginalFilename());
                 multipartFile.transferTo(jarFile);
@@ -64,5 +66,21 @@ public class PluginUploadRequest {
                 .contextPath(contextPath)
                 .libPath(pluginLibPath)
                 .build();
+    }
+
+    public Plugin toPluginBean() throws IOException {
+        String osName = System.getProperty("os.name");
+        if (StringUtils.startsWithIgnoreCase(osName, "win")) {
+            return toPluginBean(PropertiesReader.readValueWithDefault(WDropConstant.APPLICATION_CONFIG, "plugin.jar.root.path.windows", "C:\\opt\\plugin"));
+        } else {
+            return toPluginBean(PropertiesReader.readValueWithDefault(WDropConstant.APPLICATION_CONFIG, "plugin.jar.root.path.linux", "/opt/plugin"));
+        }
+    }
+
+    public static void main(String[] args) {
+        File[] roots = File.listRoots();
+        for (int i = 0; i < roots.length; i++) {
+            System.out.println(roots[i]);
+        }
     }
 }

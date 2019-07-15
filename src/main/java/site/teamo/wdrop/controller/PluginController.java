@@ -21,7 +21,7 @@ public class PluginController {
     @PostMapping(value = "/upload",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},produces = {MediaType.APPLICATION_JSON_UTF8_VALUE})
     public JSONObject upload(@Valid PluginUploadRequest pluginUploadRequest){
         try {
-            Plugin plugin = pluginUploadRequest.toPluginBean(PropertiesReader.readValueWithDefault(WDropConstant.APPLICATION_CONFIG,"plugin.jar.root.path","/opt/plugin"));
+            Plugin plugin = pluginUploadRequest.toPluginBean();
         } catch (IOException e) {
             e.printStackTrace();
         }
