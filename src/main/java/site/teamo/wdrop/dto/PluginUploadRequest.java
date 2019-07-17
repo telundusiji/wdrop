@@ -16,7 +16,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -42,6 +41,9 @@ public class PluginUploadRequest {
     public Plugin toPluginBean(String libRootPath) throws IOException {
         if (StringUtils.isBlank(libRootPath)) {
             throw new RuntimeException("jar lib path is blank");
+        }
+        if(StringUtils.startsWithIgnoreCase(getContextPath(),"w")){
+            throw new RuntimeException();
         }
         String pluginLibPath = libRootPath + File.separatorChar + pluginName;
         File libDir = new File(pluginLibPath);

@@ -7,6 +7,8 @@ import site.teamo.wdrop.bean.Plugin;
 import site.teamo.wdrop.exception.WDropException;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -51,6 +53,15 @@ public class WDropContext {
         }
     }
 
+    public WDropPluginApp getPluginApp(String url) throws Exception {
+        Plugin plugin = pluginMap.get(url);
+        WDropClassLoader pluginClassLoader = pluginClassLoaderMap.get(url);
+        Class pa = Class.forName(plugin.getClassName(), true, pluginClassLoader);
+        LOGGER.info("plugin app main class name:{}", pa.getName());
+        Constructor<WDropPluginApp> constructor = pa.getConstructor(WDropPluginApp.class);
+        return constructor.newInstance();
+    }
+
     public void uninstallPlugin(Plugin plugin) {
         synchronized (lock) {
             checkPlugin(plugin);
@@ -66,14 +77,14 @@ public class WDropContext {
 
     }
 
-    public void destroy(){
-        synchronized (lock){
+    public void destroy() {
+        synchronized (lock) {
             pluginMap.clear();
-            for(Map.Entry<String,WDropClassLoader> entry : pluginClassLoaderMap.entrySet()){
+            for (Map.Entry<String, WDropClassLoader> entry : pluginClassLoaderMap.entrySet()) {
                 try {
                     entry.getValue().close();
                 } catch (WDropException e) {
-                    LOGGER.error("close WDropClassLoader exception",e);
+                    LOGGER.error("close WDropClassLoader exception", e);
                 }
             }
             pluginClassLoaderMap.clear();
