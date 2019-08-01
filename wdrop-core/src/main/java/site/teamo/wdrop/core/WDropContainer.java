@@ -23,8 +23,10 @@ public class WDropContainer {
         this.contextMap = new ConcurrentHashMap<>();
     }
 
-    private void load() {
-        List<Plugin> pluginList = new ArrayList<>();
+    private WDropPluginDataSource wDropPluginDataSource;
+
+    public void load() {
+        List<Plugin> pluginList = wDropPluginDataSource.getAllPlugin();
         for (Plugin plugin : pluginList) {
             if (contextMap.containsKey(plugin.getContextPath())) {
                 contextMap.get(plugin.getContextPath()).installPlugin(plugin);
@@ -34,19 +36,12 @@ public class WDropContainer {
         }
     }
 
-    private void cleanAndLoad() {
+    public void cleanAndLoad() {
         for (Map.Entry<String, WDropContext> entry : contextMap.entrySet()) {
             entry.getValue().destroy();
         }
         contextMap.clear();
         load();
-    }
-
-    private void update(Plugin plugin) {
-        if (!contextMap.containsKey(plugin.getContextPath())) {
-
-        }
-
     }
 
     public static WDropContainer getInstance() {
@@ -64,5 +59,13 @@ public class WDropContainer {
             LOGGER.error("plugin execute error!", e);
         }
         return new JSONObject();
+    }
+
+    public WDropPluginDataSource getWDropPluginDataSource() {
+        return wDropPluginDataSource;
+    }
+
+    public void setWDropPluginDataSource(WDropPluginDataSource wDropPluginDataSource) {
+        this.wDropPluginDataSource = wDropPluginDataSource;
     }
 }

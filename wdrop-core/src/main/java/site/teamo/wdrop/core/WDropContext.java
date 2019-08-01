@@ -8,21 +8,19 @@ import site.teamo.wdrop.common.util.app.WDropPluginApp;
 import site.teamo.wdrop.exception.WDropException;
 
 import java.lang.reflect.Constructor;
-import java.net.MalformedURLException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class WDropContext {
     private static final Logger LOGGER = LoggerFactory.getLogger(WDropContext.class);
     private String contextPath;
-    private Map<String, Plugin> pluginMap;
-    private Map<String, WDropClassLoader> pluginClassLoaderMap;
+    private Map<String, WDropPlugin> wDropPluginMap;
+
     private Object lock = new Object();
 
     public WDropContext(String contextPath) {
         this.contextPath = contextPath;
-        pluginMap = new ConcurrentHashMap<>();
-        pluginClassLoaderMap = new ConcurrentHashMap<>();
+        wDropPluginMap = new ConcurrentHashMap<>();
     }
 
     public void installPlugin(Plugin plugin) {
@@ -31,31 +29,21 @@ public class WDropContext {
             /**
              * 校验唯一键 exist
              */
-            if (existPlugin(plugin)) {
+            if (wDropPluginMap.containsKey(plugin.getUrl())) {
                 throw new RuntimeException("plugin has been registered,install failed");
             }
             /**
              * 存入 pluginInfoMap
              */
             String url = plugin.getUrl();
-            pluginMap.put(url, plugin);
-            try {
-                /**
-                 * 存入 pluginClassLoaderMap
-                 */
-                pluginClassLoaderMap.put(url, WDropClassLoader.newWDropClassLoader(plugin.getLibPath(), Thread.currentThread().getContextClassLoader()));
-            } catch (MalformedURLException e) {
-                //异常回滚
-                removePlugin(plugin);
-                throw new RuntimeException("load plugin jar error,install failed");
-            }
+            wDropPluginMap.put(url, WDropPlugin.createWDropPlugin(plugin));
         }
     }
 
     public WDropPluginApp getPluginApp(String url) throws Exception {
-        Plugin plugin = pluginMap.get(url);
-        WDropClassLoader pluginClassLoader = pluginClassLoaderMap.get(url);
-        Class pa = Class.forName(plugin.getClassName(), true, pluginClassLoader);
+        WDropPlugin wDropPlugin = wDropPluginMap.get(url);
+        WDropClassLoader pluginClassLoader = wDropPlugin.getwDropClassLoader();
+        Class pa = Class.forName(wDropPlugin.getPlugin().getClassName(), true, pluginClassLoader);
         LOGGER.info("plugin app main class name:{}", pa.getName());
         Constructor<WDropPluginApp> constructor = pa.getConstructor(WDropPluginApp.class);
         return constructor.newInstance();
@@ -68,25 +56,16 @@ public class WDropContext {
         }
     }
 
-    public boolean isExist(Plugin plugin) {
-        synchronized (lock) {
-            checkPlugin(plugin);
-            return existPlugin(plugin);
-        }
-
-    }
-
     public void destroy() {
         synchronized (lock) {
-            pluginMap.clear();
-            for (Map.Entry<String, WDropClassLoader> entry : pluginClassLoaderMap.entrySet()) {
+            for (Map.Entry<String, WDropPlugin> entry : wDropPluginMap.entrySet()) {
                 try {
-                    entry.getValue().close();
+                    entry.getValue().destroy();
                 } catch (WDropException e) {
-                    LOGGER.error("close WDropClassLoader exception", e);
+                    LOGGER.error("destroy wDropPlugin error,plugin url:{}",entry.getKey(),e);
                 }
             }
-            pluginClassLoaderMap.clear();
+            wDropPluginMap.clear();
         }
     }
 
@@ -108,25 +87,9 @@ public class WDropContext {
 
     private void removePlugin(Plugin plugin) {
         String url = plugin.getUrl();
-        if (pluginMap.containsKey(url)) {
-            pluginMap.remove(url);
+        if (wDropPluginMap.containsKey(url)) {
+            WDropPlugin wDropPlugin = wDropPluginMap.remove(url);
+            wDropPlugin.destroy();
         }
-        if (pluginClassLoaderMap.containsKey(url)) {
-            try {
-                pluginClassLoaderMap.remove(url).close();
-            } catch (WDropException e) {
-                LOGGER.error("uninstall plugin close WDropClassLoader error", e);
-            }
-        }
-    }
-
-    private boolean existPlugin(Plugin plugin) {
-        String url = plugin.getUrl();
-        boolean flagPluginMapContainsKey = pluginMap.containsKey(url);
-        boolean flagPluginClassLoaderMapContainsKey = pluginClassLoaderMap.containsKey(url);
-        if (flagPluginClassLoaderMapContainsKey != flagPluginMapContainsKey) {
-            removePlugin(plugin);
-        }
-        return flagPluginMapContainsKey && flagPluginClassLoaderMapContainsKey;
     }
 }

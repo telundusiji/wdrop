@@ -1,16 +1,9 @@
 package site.teamo.wdrop.core;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import site.teamo.wdrop.bean.Plugin;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.nio.charset.Charset;
 
 public class WDropPlugin {
     private static final Logger LOGGER = LoggerFactory.getLogger(WDropPlugin.class);
@@ -50,5 +43,9 @@ public class WDropPlugin {
 
     public WDropClassLoader getwDropClassLoader() {
         return wDropClassLoader;
+    }
+
+    public void destroy(){
+        wDropClassLoader.close();
     }
 }
