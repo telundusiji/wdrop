@@ -11,7 +11,7 @@
 
     <groupId>site.teamo.wdrop.common</groupId>
     <artifactId>tool</artifactId>
-
+    <packaging>jar</packaging>
     <name>tool</name>
 
     <properties>
