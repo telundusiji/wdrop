@@ -16,7 +16,7 @@
     <name>wdrop-plugin</name>
 
     <modules>
-        <module>test</module>
+        <module>wdrop-plugin-test</module>
     </modules>
 
 </project>

@@ -29,18 +29,54 @@
         <dependencies>
             <dependency>
                 <groupId>site.teamo.wdrop.core</groupId>
-                <artifactId>core-start</artifactId>
+                <artifactId>wdrop-core-start</artifactId>
+                <version>${wdrop.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>site.teamo.wdrop.core</groupId>
+                <artifactId>wdrop-core-base</artifactId>
+                <version>${wdrop.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>site.teamo.wdrop.core</groupId>
+                <artifactId>wdrop-core-data</artifactId>
+                <version>${wdrop.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>site.teamo.wdrop.core</groupId>
+                <artifactId>wdrop-core-controller</artifactId>
+                <version>${wdrop.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>site.teamo.wdrop.core</groupId>
+                <artifactId>wdrop-core-util</artifactId>
+                <version>${wdrop.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>site.teamo.wdrop.core</groupId>
+                <artifactId>wdrop-core-bean</artifactId>
+                <version>${wdrop.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>site.teamo.wdrop.core</groupId>
+                <artifactId>wdrop-core-exception</artifactId>
                 <version>${wdrop.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>site.teamo.wdrop.common</groupId>
-                <artifactId>tool</artifactId>
+                <artifactId>wdrop-common-tool</artifactId>
                 <version>${wdrop.version}</version>
             </dependency>
             <dependency>
                 <groupId>site.teamo.wdrop.common</groupId>
-                <artifactId>util</artifactId>
+                <artifactId>wdrop-common-util</artifactId>
                 <version>${wdrop.version}</version>
             </dependency>
 
