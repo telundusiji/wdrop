@@ -19,7 +19,15 @@
             <filtered>true</filtered>
             <!-- 定义归档输出目录 -->
             <outputDirectory>config</outputDirectory>
-            <fileMode>755</fileMode>
+            <fileMode>0755</fileMode>
+            <lineEnding>unix</lineEnding>
+        </fileSet>
+
+        <fileSet>
+            <directory>src/bin</directory>
+            <filtered>true</filtered>
+            <outputDirectory>bin</outputDirectory>
+            <fileMode>0755</fileMode>
             <lineEnding>unix</lineEnding>
         </fileSet>
 
