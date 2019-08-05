@@ -11,8 +11,12 @@
 
     <groupId>site.teamo.wdrop</groupId>
     <artifactId>wdrop-core</artifactId>
+    <packaging>pom</packaging>
 
     <name>wdrop-core</name>
+    <modules>
+        <module>core-start</module>
+    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
