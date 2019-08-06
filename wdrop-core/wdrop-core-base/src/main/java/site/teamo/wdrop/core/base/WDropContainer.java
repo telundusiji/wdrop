@@ -27,11 +27,10 @@ public class WDropContainer {
     public void load() {
         List<Plugin> pluginList = wDropPluginDataSource.getAllPlugin();
         for (Plugin plugin : pluginList) {
-            if (contextMap.containsKey(plugin.getContextPath())) {
-                contextMap.get(plugin.getContextPath()).installPlugin(plugin);
-            } else {
+            if (!contextMap.containsKey(plugin.getContextPath())) {
                 contextMap.put(plugin.getContextPath(), new WDropContext(plugin.getContextPath()));
             }
+            contextMap.get(plugin.getContextPath()).installPlugin(plugin);
         }
     }
 

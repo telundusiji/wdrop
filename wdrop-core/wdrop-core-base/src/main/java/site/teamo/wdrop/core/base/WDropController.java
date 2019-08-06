@@ -26,12 +26,11 @@ public class WDropController {
     public JSONObject wDrop(@PathVariable String contextPath, HttpServletRequest request, HttpServletResponse response) {
         LOGGER.info("\n--REQUEST:{}\n--URI:{}\n--QUERY:{}", request.getRequestURL().toString(), request.getRequestURI(), request.getQueryString());
         contextPath = "/" + contextPath;
-        String url = request.getRequestURI().replace("/WDrop" + contextPath, "");
+        String url = request.getRequestURI().replace("/WDrop" , "");
         JSONObject para = resolveRequest(request);
         Map<String, String> queryMap = resolveQueryString(request.getQueryString());
         LOGGER.info("\n--CONTEXT_PATH:{}\n--URL:{}\n--QUERY_MAP:{}\n--PARAMETER:{}", contextPath, url, JSONObject.toJSONString(queryMap), para.toJSONString());
-        WDropContainer.execute(contextPath, url, queryMap, para);
-        return new JSONObject();
+        return WDropContainer.execute(contextPath, url, queryMap, para);
     }
 
     private JSONObject resolveRequest(HttpServletRequest request) {

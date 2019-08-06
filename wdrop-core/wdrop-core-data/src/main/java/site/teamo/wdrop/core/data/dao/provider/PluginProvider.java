@@ -16,38 +16,38 @@ public class PluginProvider {
             {
                 INSERT_INTO("wdrop_plugin");
                 if(StringUtils.isNotBlank(plugin.getPluginId())){
-                    VALUES("plugin_id",plugin.getPluginId());
+                    VALUES("plugin_id","#{pluginId}");
                 }else {
                     throw new RuntimeException("'plugin_id' is not allowed to be empty");
                 }
 
                 if(StringUtils.isNotBlank(plugin.getPluginName())){
-                    VALUES("plugin_name",plugin.getPluginName());
+                    VALUES("plugin_name","#{pluginName}");
                 }else {
                     throw new RuntimeException("'plugin_name' is not allowed to be empty");
                 }
 
                 if(StringUtils.isNotBlank(plugin.getContextPath())){
-                    VALUES("context_path",plugin.getContextPath());
+                    VALUES("context_path","#{contextPath}");
                 }else {
                     throw new RuntimeException("'context_path' is not allowed to be empty");
                 }
 
                 if (StringUtils.isNotBlank(plugin.getUrl())&&plugin.getUrl().contains(plugin.getContextPath())){
-                    VALUES("url",plugin.getUrl());
+                    VALUES("url","#{url}");
                 }else {
                     LOGGER.error("url:{};contextPath:{}",plugin.getUrl(),plugin.getContextPath());
                     throw new RuntimeException("'url' is not allowed to be empty and 'url' must contain 'context_path'");
                 }
 
                 if(StringUtils.isNotBlank(plugin.getLibPath())){
-                    VALUES("lib_path",plugin.getLibPath());
+                    VALUES("lib_path","#{libPath}");
                 }else {
                     throw new RuntimeException("'lib_path' is not allowed to be empty");
                 }
 
                 if(StringUtils.isNotBlank(plugin.getClassName())){
-                    VALUES("class_name",plugin.getClassName());
+                    VALUES("class_name","#{className}");
                 }else {
                     throw new RuntimeException("'class_name' is not allowed to be empty");
                 }

@@ -45,8 +45,7 @@ public class WDropContext {
         WDropClassLoader pluginClassLoader = wDropPlugin.getwDropClassLoader();
         Class pa = Class.forName(wDropPlugin.getPlugin().getClassName(), true, pluginClassLoader);
         LOGGER.info("plugin app main class name:{}", pa.getName());
-        Constructor<WDropPluginApp> constructor = pa.getConstructor(WDropPluginApp.class);
-        return constructor.newInstance();
+        return (WDropPluginApp) pa.newInstance();
     }
 
     public void uninstallPlugin(Plugin plugin) {
