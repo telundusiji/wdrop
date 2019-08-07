@@ -34,6 +34,13 @@ public class WDropContainer {
         }
     }
 
+    public static void installPlugin(Plugin plugin){
+        if (!wDropContainer.contextMap.containsKey(plugin.getContextPath())) {
+            wDropContainer.contextMap.put(plugin.getContextPath(), new WDropContext(plugin.getContextPath()));
+        }
+        wDropContainer.contextMap.get(plugin.getContextPath()).installPlugin(plugin);
+    }
+
     public void cleanAndLoad() {
         for (Map.Entry<String, WDropContext> entry : contextMap.entrySet()) {
             entry.getValue().destroy();

@@ -31,6 +31,7 @@ public class PluginController {
         try {
             Plugin plugin = pluginUploadRequest.toPluginBean();
             pluginMapper.saveToDb(plugin);
+            WDropContainer.installPlugin(plugin);
         } catch (IOException e) {
             e.printStackTrace();
         }
