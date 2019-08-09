@@ -23,7 +23,7 @@ public class WDropContext {
         wDropPluginMap = new ConcurrentHashMap<>();
     }
 
-    public void installPlugin(Plugin plugin) {
+    public void installPlugin(Plugin plugin) throws Exception {
         synchronized (lock) {
             checkPlugin(plugin);
             /**
@@ -42,7 +42,10 @@ public class WDropContext {
 
     public WDropPluginApp getPluginApp(String url) throws Exception {
         WDropPlugin wDropPlugin = wDropPluginMap.get(url);
-        WDropClassLoader pluginClassLoader = wDropPlugin.getwDropClassLoader();
+        if(wDropPlugin.getWDropPluginApp()!=null){
+            return wDropPlugin.getWDropPluginApp();
+        }
+        WDropClassLoader pluginClassLoader = wDropPlugin.getWDropClassLoader();
         Class pa = Class.forName(wDropPlugin.getPlugin().getClassName(), true, pluginClassLoader);
         LOGGER.info("plugin app main class name:{}", pa.getName());
         return (WDropPluginApp) pa.newInstance();

@@ -32,7 +32,7 @@ public class PluginController {
             Plugin plugin = pluginUploadRequest.toPluginBean();
             pluginMapper.saveToDb(plugin);
             WDropContainer.installPlugin(plugin);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         JSONObject jsonObject = new JSONObject();

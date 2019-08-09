@@ -24,17 +24,21 @@ public class WDropContainer {
 
     private WDropPluginDataSource wDropPluginDataSource;
 
-    public void load() {
+    public void load(){
         List<Plugin> pluginList = wDropPluginDataSource.getAllPlugin();
         for (Plugin plugin : pluginList) {
             if (!contextMap.containsKey(plugin.getContextPath())) {
                 contextMap.put(plugin.getContextPath(), new WDropContext(plugin.getContextPath()));
             }
-            contextMap.get(plugin.getContextPath()).installPlugin(plugin);
+            try {
+                contextMap.get(plugin.getContextPath()).installPlugin(plugin);
+            } catch (Exception e) {
+                LOGGER.warn("load plugin error,plugin info:{}\nerrorMsg:{}",JSONObject.toJSONString(plugin),e.getMessage());
+            }
         }
     }
 
-    public static void installPlugin(Plugin plugin){
+    public static void installPlugin(Plugin plugin) throws Exception {
         if (!wDropContainer.contextMap.containsKey(plugin.getContextPath())) {
             wDropContainer.contextMap.put(plugin.getContextPath(), new WDropContext(plugin.getContextPath()));
         }
