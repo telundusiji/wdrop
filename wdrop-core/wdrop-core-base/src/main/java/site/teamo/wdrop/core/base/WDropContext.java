@@ -1,6 +1,7 @@
 package site.teamo.wdrop.core.base;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import site.teamo.wdrop.common.util.app.WDropPluginApp;
@@ -15,7 +16,7 @@ public class WDropContext {
     private static final Logger LOGGER = LoggerFactory.getLogger(WDropContext.class);
     private String contextPath;
     private Map<String, WDropPlugin> wDropPluginMap;
-
+    private SqlSessionFactory sqlSessionFactory;
     private Object lock = new Object();
 
     public WDropContext(String contextPath) {
